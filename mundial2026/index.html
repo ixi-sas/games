@@ -508,10 +508,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Nunito',sans-serif
 /* ===== MOBILE PORTRAIT (phones) ===== */
 @media (max-width:600px){
   /* Start: centered content with bottom padding to make room for players */
-  #startScreen{justify-content:center;padding-bottom:22vh}
-  .start-year{font-size:12px;letter-spacing:3px;margin-bottom:2px}
+  #startScreen{justify-content:center;padding-bottom:20vh}
+  .start-year{font-size:13px;letter-spacing:3px;margin-bottom:2px}
   .start-title{font-size:clamp(48px,15vw,80px);letter-spacing:3px}
-  .start-hook{font-size:14px;white-space:normal;max-width:90vw;padding:0 15px;margin:4px 0 2px}
+  .start-hook{font-size:15px;white-space:normal;max-width:88vw;padding:0 15px;margin:6px 0 3px}
   .start-tagline{font-size:11px;letter-spacing:1px;margin-bottom:16px}
   .start-btn{padding:14px 50px;font-size:26px}
   .start-badge{font-size:11px;padding:3px 12px;margin-top:8px}
@@ -519,83 +519,87 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Nunito',sans-serif
   .start-players{
     position:absolute!important;bottom:0;left:0;right:0;
     display:flex;justify-content:space-evenly;align-items:flex-end;
-    padding:0 8px;
+    padding:0 4px;overflow:hidden;
   }
   .start-players img{
     position:static!important;left:auto!important;right:auto!important;
-    height:20vh!important;max-height:160px!important;
+    height:16vh!important;max-height:130px!important;
+    max-width:23vw!important;object-fit:contain!important;
     transform:none!important;flex-shrink:0;
   }
 
   /* Final: same approach */
-  #finalScreen{justify-content:center;padding-bottom:22vh}
+  #finalScreen{justify-content:center;padding-bottom:20vh}
   .fin-title{font-size:clamp(36px,12vw,60px)}
   .fin-year{font-size:14px;letter-spacing:3px}
-  .fin-stars{font-size:18px;letter-spacing:3px}
-  .fin-trophy{font-size:40px}
-  .fin-sub{font-size:14px;margin:4px 0 6px}
-  .replay-btn{padding:12px 36px;font-size:24px}
+  .fin-stars{font-size:14px;letter-spacing:2px;line-height:1.6;max-width:92vw}
+  .fin-trophy{font-size:44px}
+  .fin-sub{font-size:15px;margin:4px 0 6px}
+  .replay-btn{padding:14px 40px;font-size:24px}
   .fin-players{
     position:absolute!important;bottom:0;left:0;right:0;
     display:flex;justify-content:space-evenly;align-items:flex-end;
-    padding:0 8px;
+    padding:0 4px;overflow:hidden;
   }
   .fin-players img{
     position:static!important;left:auto!important;right:auto!important;
-    height:20vh!important;max-height:160px!important;
+    height:16vh!important;max-height:130px!important;
+    max-width:23vw!important;object-fit:contain!important;
     transform:none!important;flex-shrink:0;
   }
 
   /* Game UI */
-  .topbar{padding:6px 10px}
-  .lvl-badge{font-size:15px;padding:4px 12px}
-  .hint-btn{font-size:12px;padding:3px 10px}
-  .question{padding:0 10px}
-  .question h1{font-size:20px}
+  .topbar{padding:8px 12px}
+  .lvl-badge{font-size:16px;padding:5px 14px}
+  .hint-btn{font-size:13px;padding:4px 12px}
+  .star-row{max-width:50vw;max-height:36px}
+  .question{padding:2px 14px}
+  .question h1{font-size:22px;line-height:1.3}
 
   /* Level elements */
-  .score-num{font-size:44px}
-  .score-sep{font-size:28px}
-  .score-drop{min-width:40px;min-height:48px;border-width:3px}
-  .score-team small{font-size:10px;letter-spacing:1px}
+  .score-board{gap:16px;top:8px}
+  .score-num{font-size:48px}
+  .score-sep{font-size:30px}
+  .score-drop{min-width:44px;min-height:52px;border-width:3px}
+  .score-team small{font-size:11px;letter-spacing:1px}
 
-  .goal{width:85vw;height:22vh;border-width:4px}
-  .ball{width:38px;height:38px;font-size:16px;border-width:2px}
+  .goal{width:82vw;height:28vh;border-width:4px}
+  .ball{width:56px;height:56px;font-size:26px;border-width:2px}
 
-  .dir-btns{gap:6px;bottom:12px}
-  .dir-btn{padding:8px 12px;font-size:15px;border-width:2px;border-radius:10px}
+  .dir-btns{gap:8px;bottom:16px}
+  .dir-btn{padding:10px 16px;font-size:16px;border-width:2px;border-radius:10px}
 
-  .numpad{right:8px}
-  .nbtn{width:46px;height:46px;font-size:20px;border-width:2px;border-radius:12px}
-  .answer-box{font-size:52px;left:12px;border-bottom-width:4px}
+  .numpad{right:10px}
+  .nbtn{width:50px;height:50px;font-size:22px;border-width:2px;border-radius:12px}
+  .answer-box{font-size:56px;left:14px;border-bottom-width:4px}
 
-  .group-col{left:10px}
-  .group-title{font-size:13px;letter-spacing:1px}
-  .flag-row{padding:8px 10px;font-size:15px;border-radius:10px;gap:8px}
-  .flag-row .fem{font-size:22px}
-  .trash{font-size:46px;right:10px;bottom:10px}
+  .group-col{left:12px}
+  .group-title{font-size:14px;letter-spacing:1px}
+  .flag-row{padding:10px 12px;font-size:16px;border-radius:10px;gap:10px}
+  .flag-row .fem{font-size:24px}
+  .trash{font-size:52px;right:12px;bottom:12px}
 
-  .tv{width:85vw;height:25vh;border-width:5px}
+  .tv{width:88vw;height:26vh;border-width:5px}
   .tv-wrap{top:38%}
   .tv-brand{font-size:6px}
-  .tv-label{font-size:10px;bottom:6px;left:6px;padding:2px 8px}
-  .remote{width:46px;height:100px;right:8px;bottom:8px;padding:6px 4px;border-radius:8px 8px 14px 14px}
-  .remote .r-power{width:22px;height:22px;font-size:9px;margin-bottom:5px}
+  .tv-label{font-size:11px;bottom:6px;left:6px;padding:3px 8px}
+  .remote{width:50px;height:110px;right:10px;bottom:10px;padding:8px 5px;border-radius:8px 8px 14px 14px}
+  .remote .r-power{width:24px;height:24px;font-size:10px;margin-bottom:6px}
   .remote .r-row{margin:2px 0}
   .remote .r-btn{width:18px;height:12px}
   .remote .r-numpad{gap:2px}
   .remote .r-num{width:10px;height:8px}
 
-  .opt{padding:8px 16px;font-size:16px;border-width:2px;border-radius:12px}
+  .opt{padding:10px 18px;font-size:17px;border-width:2px;border-radius:12px}
 
-  .t-case{width:150px;height:190px;border-width:3px;border-radius:18px}
-  .t-case .cup{font-size:44px}
-  .t-case .lock{font-size:30px}
-  .t-case .taps{font-size:13px}
+  .t-case{width:160px;height:200px;border-width:3px;border-radius:18px}
+  .t-case .cup{font-size:48px}
+  .t-case .lock{font-size:32px}
+  .t-case .taps{font-size:14px}
 
-  .suc-text{font-size:32px}
-  .suc-sub{font-size:14px;margin:6px 0 20px}
-  .nxt-btn{padding:12px 36px;font-size:22px}
+  .suc-text{font-size:34px}
+  .suc-sub{font-size:15px;margin:6px 0 22px}
+  .nxt-btn{padding:14px 40px;font-size:24px}
 }
 
 /* ===== TABLET ===== */
@@ -651,12 +655,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Nunito',sans-serif
 @media (max-width:375px){
   .start-title{font-size:42px}
   .start-btn{padding:12px 36px;font-size:22px}
-  .question h1{font-size:18px}
-  .score-num{font-size:38px}
-  .opt{padding:6px 12px;font-size:14px}
-  .flag-row{padding:6px 8px;font-size:13px}
-  .flag-row .fem{font-size:18px}
-  .nbtn{width:42px;height:42px;font-size:18px}
+  .question h1{font-size:19px}
+  .score-num{font-size:42px}
+  .ball{width:50px;height:50px;font-size:22px}
+  .opt{padding:8px 14px;font-size:15px}
+  .flag-row{padding:8px 10px;font-size:14px}
+  .flag-row .fem{font-size:20px}
+  .nbtn{width:46px;height:46px;font-size:20px}
 }
 </style>
 </head>
@@ -871,7 +876,7 @@ function hidePopups(){document.getElementById('hintPop').classList.remove('on');
 function updateStars(){
   const r=document.getElementById('starRow');
   if(mob()){
-    r.innerHTML=`<span style="font-family:Bangers;font-size:16px;color:#F5A623">${stars} <span style="color:#ccc">/ 36</span></span>`;
+    r.innerHTML=`<span style="font-family:Bangers;font-size:18px;color:#F5A623">\u2B50 ${stars} <span style="color:#ccc;font-size:14px">/ 36</span></span>`;
   } else {
     let h='';
     for(let i=0;i<Math.min(stars,36);i++)h+='<div class="star-dot on"></div>';
@@ -883,11 +888,16 @@ function showFinal(){
   const fs=document.getElementById('finalScreen');
   fs.classList.add('on');
   document.getElementById('finScore').textContent=stars+' estrellas de '+L.length*3;
-  // Generate star display - max 12 stars visually, clean layout
+  // Generate star display - show per-level stars (3 per level)
   const finStarsEl=document.getElementById('finStars');
-  const maxVisual=Math.min(Math.ceil(stars/3),12);
-  let sh='';for(let i=0;i<maxVisual;i++)sh+='\u2B50';
-  finStarsEl.textContent=sh||'';
+  let sh='';
+  for(let lv=0;lv<L.length;lv++){
+    const earned=done[lv]?(attempts[lv]===0?3:attempts[lv]<=2?2:1):0;
+    for(let s=0;s<earned;s++)sh+='\u2B50';
+    for(let s=earned;s<3;s++)sh+='\u2606';
+    if(lv<L.length-1)sh+=' ';
+  }
+  finStarsEl.innerHTML=sh||'';
   // Particles
   const pc=document.getElementById('finParticles');
   pc.innerHTML='';
@@ -1074,15 +1084,17 @@ function rph(frac,max){return Math.min(playH()*frac,max||400)+'px'}
 // ===== LEVEL 1: Arrastra el gol =====
 function lv1(){
   const p=document.getElementById('play');
-  const ph=rph(mob()?.6:.7,350);
+  const m=mob();
+  const ph=rph(m?.42:.65,m?220:350);
+  const neyPh=rph(m?.34:.55,m?180:290);
   p.innerHTML=`
     <div class="score-board">
       <div class="score-team"><small>ARGENTINA</small><div class="score-drop" id="l1drop"><span class="score-num" style="color:#ddd">0</span></div></div>
       <span class="score-sep">-</span>
       <div class="score-team"><small>BRASIL</small><span class="score-num drag" id="l1bra">1</span></div>
     </div>
-    <img src="${I.messi}" class="player-img" id="l1messi" style="height:${ph};position:absolute;left:10%;bottom:0">
-    <img src="${I.neyH}" class="player-img" id="l1ney" style="height:calc(${ph} * 0.82);position:absolute;right:10%;bottom:0">
+    <img src="${I.neyH}" class="player-img" id="l1ney" style="height:${neyPh};position:absolute;left:${m?'5%':'10%'};bottom:0">
+    <img src="${I.messi}" class="player-img" id="l1messi" style="height:${ph};position:absolute;right:${m?'5%':'10%'};bottom:0">
   `;
   const bra=document.getElementById('l1bra'),drop=document.getElementById('l1drop');
   mkDrag(bra,{
@@ -1092,8 +1104,9 @@ function lv1(){
       if(over(x,y,drop)){
         bra.style.display='none';
         drop.innerHTML='<span class="score-num" style="color:#F5A623">1</span>';
-        document.getElementById('l1messi').src=I.messiC;
-        const ny=document.getElementById('l1ney');ny.src=I.neyC;ny.style.height=Math.min(innerHeight*.3,220)+'px';
+        const ms=document.getElementById('l1messi');ms.src=I.messiC;
+        const ny=document.getElementById('l1ney');ny.src=I.neyC;
+        ny.style.height=Math.min(innerHeight*(m?.18:.25),m?140:200)+'px';
         sfxGoal();setTimeout(lvComplete,700);return true;
       }
     }
@@ -1104,12 +1117,13 @@ function lv1(){
 function lv2(){
   const p=document.getElementById('play');
   const m=mob();
-  const gh=Math.min(playH()*(m?.5:.6),350),gw=Math.min(innerWidth*(m?.8:.55),550);
-  const mbH=gh*(m?.6:.7);
+  const gh=Math.min(playH()*(m?.45:.55),320),gw=Math.min(innerWidth*(m?.82:.55),550);
+  const mbH=gh*(m?.55:.65);
+  const ballSize=m?56:70;
   p.innerHTML=`
     <div class="goal" id="l2goal" style="width:${gw}px;height:${gh}px"></div>
-    <img src="${I.mbS}" class="player-img" id="l2mb" style="height:${mbH}px;position:absolute;top:${gh*.15+(m?40:60)}px;left:50%;transform:translateX(-50%);z-index:10;cursor:grab">
-    <div class="ball" id="l2ball" style="bottom:clamp(15px,6vh,80px);left:50%;transform:translateX(-50%)">&#9917;</div>
+    <img src="${I.mbS}" class="player-img" id="l2mb" style="height:${mbH}px;position:absolute;top:${gh*.12+(m?44:60)}px;left:50%;transform:translateX(-50%);z-index:10;cursor:grab">
+    <div class="ball" id="l2ball" style="width:${ballSize}px;height:${ballSize}px;font-size:${m?26:32}px;bottom:${m?'18px':'clamp(15px,6vh,80px)'};left:50%;transform:translateX(-50%)">&#9917;</div>
   `;
   let moved=false;
   const mb=document.getElementById('l2mb'),ball=document.getElementById('l2ball'),goal=document.getElementById('l2goal');
@@ -1141,13 +1155,14 @@ function lv2(){
 // ===== LEVEL 3: Saca a Neymar =====
 function lv3(){
   const p=document.getElementById('play');
-  const ph=rph(mob()?.6:.7,400);
+  const m=mob();
+  const ph=rph(m?.5:.65,m?280:400);
   p.innerHTML=`
-    <img src="${I.neyC}" class="player-img" id="l3ney" style="height:${ph};position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);cursor:grab">
-    <div style="position:absolute;bottom:clamp(20px,5vh,60px);display:flex;gap:clamp(15px,3vw,30px);left:50%;transform:translateX(-50%)">
-      <span style="font-size:clamp(40px,6vw,64px);cursor:pointer" onclick="wrong('No le alcanza un panuelo...')">&#129531;</span>
-      <span style="font-size:clamp(40px,6vw,64px);cursor:pointer" onclick="wrong('No esta lastimado... bueno, si.')">&#129657;</span>
-      <span style="font-size:clamp(40px,6vw,64px);cursor:pointer" onclick="wrong('Jaja como si tuviera alguna!')">&#127942;</span>
+    <img src="${I.neyC}" class="player-img" id="l3ney" style="height:${ph};position:absolute;left:50%;top:${m?'42%':'50%'};transform:translate(-50%,-50%);cursor:grab">
+    <div style="position:absolute;bottom:${m?'14px':'clamp(20px,5vh,60px)'};display:flex;gap:${m?'20px':'clamp(15px,3vw,30px)'};left:50%;transform:translateX(-50%)">
+      <span style="font-size:${m?'48px':'clamp(40px,6vw,64px)'};cursor:pointer" onclick="wrong('No le alcanza un panuelo...')">&#129531;</span>
+      <span style="font-size:${m?'48px':'clamp(40px,6vw,64px)'};cursor:pointer" onclick="wrong('No esta lastimado... bueno, si.')">&#129657;</span>
+      <span style="font-size:${m?'48px':'clamp(40px,6vw,64px)'};cursor:pointer" onclick="wrong('Jaja como si tuviera alguna!')">&#127942;</span>
     </div>
   `;
   const ney=document.getElementById('l3ney');
@@ -1172,9 +1187,10 @@ function lv3(){
 // ===== LEVEL 4: Tercera estrella =====
 function lv4(){
   const p=document.getElementById('play');
-  const ph=rph(mob()?.55:.65,380);
+  const m=mob();
+  const ph=rph(m?.42:.6,m?240:380);
   // Diverse fake stars scattered around (avoid center where Messi is)
-  const ss=mob()?34:52; // star base size
+  const ss=m?38:52; // star base size
   const fakeStars=[
     {x:'4%', y:'12%', s:ss,   icon:'\u2B50'},
     {x:'88%',y:'8%',  s:ss+4, icon:'\uD83C\uDF1F'},
@@ -1242,14 +1258,14 @@ function lv4(){
 function lv5(){
   const p=document.getElementById('play');
   const m=mob();
-  const ph=m?'20vh':Math.min(innerHeight*.42,320)+'px';
+  const ph=m?Math.min(playH()*.32,160)+'px':Math.min(innerHeight*.42,320)+'px';
   if(m){
     p.innerHTML=`
-      <div style="position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-evenly;align-items:flex-end;padding:0 4px">
-        <img src="${I.messiC}" class="player-img interactive" id="l5messi" style="height:${ph};pointer-events:auto" onclick="wrong('No es tan simple... arrastra algo.')">
-        <img src="${I.cr7X}" class="player-img interactive" style="height:${ph};pointer-events:auto" onclick="wrong('Casi... pero no.')">
-        <img src="${I.mbS2}" class="player-img interactive" style="height:${ph};pointer-events:auto" onclick="wrong('Le falta mucho todavia.')">
-        <img src="${I.haS}" class="player-img interactive" style="height:${ph};pointer-events:auto" onclick="wrong('Este vikingo? Nah.')">
+      <div style="position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-evenly;align-items:flex-end;padding:0 2px;gap:2px">
+        <img src="${I.messiC}" class="player-img interactive" id="l5messi" style="height:${ph};max-width:24vw;object-fit:contain;pointer-events:auto" onclick="wrong('No es tan simple... arrastra algo.')">
+        <img src="${I.cr7X}" class="player-img interactive" style="height:${ph};max-width:24vw;object-fit:contain;pointer-events:auto" onclick="wrong('Casi... pero no.')">
+        <img src="${I.mbS2}" class="player-img interactive" style="height:${ph};max-width:24vw;object-fit:contain;pointer-events:auto" onclick="wrong('Le falta mucho todavia.')">
+        <img src="${I.haS}" class="player-img interactive" style="height:${ph};max-width:24vw;object-fit:contain;pointer-events:auto" onclick="wrong('Este vikingo? Nah.')">
       </div>`;
   } else {
     p.innerHTML=`
@@ -1281,16 +1297,17 @@ function lv5(){
 function lv6(){
   const p=document.getElementById('play');
   const m=mob();
-  const gh=Math.min(playH()*(m?.45:.55),320),gw=Math.min(innerWidth*(m?.8:.5),500);
+  const gh=Math.min(playH()*(m?.4:.5),300),gw=Math.min(innerWidth*(m?.82:.5),500);
+  const ballSize=m?52:70;
   p.innerHTML=`
     <div class="goal" id="l6goal" style="width:${gw}px;height:${gh}px"></div>
-    <img src="${I.haGK}" class="player-img" style="height:${gh*.75}px;position:absolute;top:${gh*.12+60}px;left:50%;transform:translateX(-50%);z-index:10;pointer-events:none">
+    <img src="${I.haGK}" class="player-img" style="height:${gh*(m?.6:.7)}px;position:absolute;top:${gh*.12+(m?48:60)}px;left:50%;transform:translateX(-50%);z-index:10;pointer-events:none">
     <div class="dir-btns">
       <button class="dir-btn" onclick="wrong('Haaland la atajo!');this.classList.add('miss');setTimeout(()=>this.classList.remove('miss'),500)">&#8592; IZQ</button>
       <button class="dir-btn" onclick="wrong('Haaland la atajo!');this.classList.add('miss');setTimeout(()=>this.classList.remove('miss'),500)">CENTRO</button>
       <button class="dir-btn" onclick="wrong('Haaland la atajo!');this.classList.add('miss');setTimeout(()=>this.classList.remove('miss'),500)">DER &#8594;</button>
     </div>
-    <div class="ball" id="l6ball" style="bottom:clamp(90px,18vh,160px);left:50%;transform:translateX(-50%);cursor:grab">&#9917;</div>
+    <div class="ball" id="l6ball" style="width:${ballSize}px;height:${ballSize}px;font-size:${m?24:32}px;bottom:${m?'80px':'clamp(90px,18vh,160px)'};left:50%;transform:translateX(-50%);cursor:grab">&#9917;</div>
   `;
   const ball=document.getElementById('l6ball'),goal=document.getElementById('l6goal');
   mkDrag(ball,{
@@ -1318,11 +1335,11 @@ function lv6(){
 function lv7(){
   const p=document.getElementById('play');
   const m=mob();
-  const ph=rph(m?.45:.55,320);
+  const ph=rph(m?.3:.55,m?180:320);
   p.innerHTML=`
-    <div class="answer-box" id="l7ans" style="${m?'left:50%;transform:translate(-50%,-120%);font-size:60px;top:35%':''}">?</div>
-    <img src="${I.messiC}" class="player-img" style="height:${ph};position:absolute;${m?'left:50%;transform:translateX(-50%);bottom:0;opacity:.15':'left:clamp(10px,3vw,40px);bottom:0'};pointer-events:none">
-    <div class="numpad" style="${m?'right:auto;left:50%;transform:translate(-50%,-50%)':''}">
+    <div class="answer-box" id="l7ans" style="${m?'left:50%;transform:translate(-50%,0);font-size:56px;top:8%':''}">?</div>
+    <img src="${I.messiC}" class="player-img" style="height:${ph};position:absolute;${m?'left:50%;transform:translateX(-50%);bottom:0':'left:clamp(10px,3vw,40px);bottom:0'};pointer-events:none">
+    <div class="numpad" style="${m?'right:auto;left:50%;transform:translate(-50%,-50%);top:45%':''}">
       <div class="nbtn" id="n1" data-n="1" style="cursor:grab">1</div>
       <div class="nbtn" id="n2" data-n="2" style="cursor:grab">2</div>
       <div class="nbtn dead">3</div>
@@ -1354,17 +1371,17 @@ function lv7(){
 function lv8(){
   const p=document.getElementById('play');
   const m=mob();
-  const ph=rph(m?.3:.4,250);
+  const ph=rph(m?.25:.4,m?160:250);
   p.innerHTML=`
-    <div class="group-col" style="${m?'left:50%;transform:translate(-50%,-50%)':''}">
+    <div class="group-col" style="${m?'left:50%;transform:translate(-50%,-55%);width:85vw':''}">
       <div class="group-title">GRUPO A - MUNDIAL 2026</div>
       <div class="flag-row" onclick="wrong('A Argentina no la sacas!')"><span class="fem">&#127462;&#127479;</span> Argentina</div>
       <div class="flag-row" id="l8bra" style="cursor:grab"><span class="fem">&#127463;&#127479;</span> Brasil</div>
       <div class="flag-row" onclick="wrong('Francia se queda... por ahora.')"><span class="fem">&#127467;&#127479;</span> Francia</div>
       <div class="flag-row" onclick="wrong('Portugal tambien se queda.')"><span class="fem">&#127477;&#127481;</span> Portugal</div>
     </div>
-    <span class="trash" id="l8trash" style="${m?'left:15px;bottom:15px;font-size:60px':''}">&#128465;</span>
-    <img src="${I.neyH}" class="player-img" id="l8ney" style="height:${m?rph(.25,140):ph};position:absolute;${m?'right:5%;bottom:0':'right:clamp(20px,5vw,60px);top:50%;transform:translateY(-50%)'};pointer-events:none">
+    <span class="trash" id="l8trash" style="${m?'right:20px;bottom:16px;font-size:56px;left:auto':''}">&#128465;</span>
+    <img src="${I.neyH}" class="player-img" id="l8ney" style="height:${ph};position:absolute;${m?'left:8px;bottom:0':'right:clamp(20px,5vw,60px);top:50%;transform:translateY(-50%)'};pointer-events:none">
   `;
   const bra=document.getElementById('l8bra'),trash=document.getElementById('l8trash'),ney=document.getElementById('l8ney');
   mkDrag(bra,{
@@ -1384,11 +1401,13 @@ function lv8(){
 // ===== LEVEL 9: TV =====
 function lv9(){
   const p=document.getElementById('play');
+  const m=mob();
+  const tvImgH=m?'clamp(90px,18vh,180px)':'clamp(100px,22vh,250px)';
   p.innerHTML=`
     <div class="tv-wrap">
       <div class="tv" id="l9tv">
         <div class="tv-inner" id="l9inner">
-          <img src="${I.mbR}" style="height:clamp(100px,22vh,250px)">
+          <img src="${I.mbR}" style="height:${tvImgH}">
           <div class="tv-label">EN VIVO - GOL DE MBAPPE 87'</div>
         </div>
         <div class="tv-brand">SAMSUNG</div>
@@ -1413,7 +1432,7 @@ function lv9(){
     document.getElementById('l9led').classList.add('green');
     setTimeout(()=>{
       inner.style.background='linear-gradient(135deg,#75AADB,#5a9bd5)';
-      inner.innerHTML=`<img src="${I.messiC}" style="height:clamp(100px,22vh,250px)"><div class="tv-label" style="background:rgba(245,166,35,.85)">ARGENTINA CAMPEON DEL MUNDO</div>`;
+      inner.innerHTML=`<img src="${I.messiC}" style="height:${tvImgH}"><div class="tv-label" style="background:rgba(245,166,35,.85)">ARGENTINA CAMPEON DEL MUNDO</div>`;
       sfxGoal();setTimeout(lvComplete,800);
     },400);
   };
@@ -1422,10 +1441,11 @@ function lv9(){
 // ===== LEVEL 10: Levanta la copa =====
 function lv10(){
   const p=document.getElementById('play');
-  const ph=rph(mob()?.6:.7,420);
+  const m=mob();
+  const ph=rph(m?.5:.65,m?300:420);
   p.innerHTML=`
     <img src="${I.messiC2}" class="player-img" id="l10messi" style="height:${ph};position:absolute;left:50%;bottom:0;transform:translateX(-50%)">
-    <span style="font-size:clamp(60px,10vw,100px);position:absolute;right:clamp(30px,6vw,80px);top:50%;transform:translateY(-50%);cursor:pointer" onclick="wrong('El trofeo esta muy pesado... arrastra otra cosa.')">&#127942;</span>
+    <span style="font-size:${m?'60px':'clamp(60px,10vw,100px)'};position:absolute;right:${m?'15px':'clamp(30px,6vw,80px)'};top:${m?'30%':'50%'};transform:translateY(-50%);cursor:pointer" onclick="wrong('El trofeo esta muy pesado... arrastra otra cosa.')">&#127942;</span>
   `;
   const ms=document.getElementById('l10messi');
   function onMove(e){
@@ -1453,14 +1473,14 @@ function lv10(){
 // ===== LEVEL 11: Campeon en frances =====
 function lv11(){
   const p=document.getElementById('play');
-  const isMobile=innerWidth<600;
-  const ph=Math.min(innerHeight*(isMobile?.35:.5),isMobile?240:380)+'px';
+  const m=innerWidth<600;
+  const ph=Math.min(innerHeight*(m?.28:.5),m?180:380)+'px';
   p.innerHTML=`
-    <img src="${I.mbS2}" class="player-img" id="l11mb" style="height:${ph};position:absolute;right:${isMobile?'2%':'5%'};bottom:0;pointer-events:none">
-    <div style="position:absolute;left:${isMobile?'3%':'5%'};top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:clamp(6px,1.5vh,18px);z-index:20;max-width:${isMobile?'55%':'auto'}">
+    <img src="${I.mbS2}" class="player-img" id="l11mb" style="height:${ph};position:absolute;right:${m?'2%':'5%'};bottom:0;pointer-events:none">
+    <div style="position:absolute;left:${m?'50%':'5%'};top:${m?'45%':'50%'};transform:${m?'translate(-50%,-50%)':'translateY(-50%)'};display:flex;flex-direction:column;gap:${m?'8px':'clamp(6px,1.5vh,18px)'};z-index:20;${m?'width:88vw;align-items:stretch':'max-width:auto'}">
       <button class="opt" onclick="wrong('Oui oui, pero no.');this.classList.add('no');setTimeout(()=>this.classList.remove('no'),500)">Le Champion</button>
       <button class="opt" onclick="wrong('Sacate la boina y pensa bien.');this.classList.add('no');setTimeout(()=>this.classList.remove('no'),500)">Le Gagneur</button>
-      <button class="opt" id="l11arg" onclick="document.getElementById('l11arg').classList.add('yes');document.getElementById('l11mb').src='${I.messiC}';document.getElementById('l11mb').style.left='50%';document.getElementById('l11mb').style.right='auto';document.getElementById('l11mb').style.transform='translateX(-50%)';sfxGoal();setTimeout(lvComplete,700)">ARGENTINA</button>
+      <button class="opt" id="l11arg" onclick="document.getElementById('l11arg').classList.add('yes');document.getElementById('l11mb').src='${I.messiC}';document.getElementById('l11mb').style.left='50%';document.getElementById('l11mb').style.right='auto';document.getElementById('l11mb').style.transform='translateX(-50%)';document.getElementById('l11mb').style.opacity='1';sfxGoal();setTimeout(lvComplete,700)">ARGENTINA</button>
       <button class="opt" onclick="wrong('Eso es un croissant, no un campeon.');this.classList.add('no');setTimeout(()=>this.classList.remove('no'),500)">Victoire Royale</button>
       <button class="opt" onclick="wrong('Mbappe ni sabe que significa eso.');this.classList.add('no');setTimeout(()=>this.classList.remove('no'),500)">Magnifique</button>
     </div>
@@ -1471,15 +1491,15 @@ function lv11(){
 function lv12(){
   const p=document.getElementById('play');
   const m=mob();
-  const ph=rph(m?.4:.5,260);
+  const ph=rph(m?.3:.5,m?160:260);
   p.innerHTML=`
     <div class="t-case" id="l12case">
       <div class="cup" id="l12cup">&#127942;</div>
       <div class="lock" id="l12lock">&#128274;</div>
       <div class="taps" id="l12taps">. . . .</div>
     </div>
-    <img src="${I.messiC}" class="player-img" style="height:${m?rph(.3,150):ph};position:absolute;left:${m?'-2%':'8%'};bottom:0;pointer-events:none">
-    <img src="${I.messiC2}" class="player-img" style="height:${m?rph(.3,150):ph};position:absolute;right:${m?'-2%':'8%'};bottom:0;pointer-events:none">
+    <img src="${I.messiC}" class="player-img" style="height:${ph};position:absolute;left:${m?'2%':'8%'};bottom:0;pointer-events:none">
+    <img src="${I.messiC2}" class="player-img" style="height:${ph};position:absolute;right:${m?'2%':'8%'};bottom:0;pointer-events:none">
   `;
   let taps=0;
   document.getElementById('l12lock').onclick=()=>{
