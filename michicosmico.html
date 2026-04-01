@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>MichiCósmico 🐱🚀</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  overflow: hidden;
+  background: #0a0a2e;
+  font-family: 'Nunito', 'Fredoka One', sans-serif;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+canvas { display: block; }
+#ui {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+}
+#ui > * { pointer-events: auto; }
+.hidden { display: none !important; }
+#titleScreen {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at center, #1a1a4e 0%, #0a0a2e 70%);
+  z-index: 100;
+}
+#titleScreen h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: min(12vw, 80px);
+  color: #fff;
+  text-shadow: 0 0 20px #f0f, 0 0 40px #0ff, 0 0 60px #ff0, 3px 3px 0 #333;
+  margin-bottom: 10px;
+  animation: titlePulse 2s ease-in-out infinite;
+}
+@keyframes titlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+#titleScreen .subtitle {
+  font-size: min(5vw, 28px);
+  color: #ffd700;
+  margin-bottom: 30px;
+  text-shadow: 0 0 10px #ffd700;
+}
+#titleScreen .cat-hero {
+  font-size: min(25vw, 150px);
+  animation: catFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(255,255,0,0.5));
+}
+@keyframes catFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+.btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: min(6vw, 36px);
+  padding: 15px 50px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  margin: 10px;
+  transition: transform 0.1s, box-shadow 0.1s;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 0 rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.2);
+}
+.btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+.btn-play {
+  background: linear-gradient(180deg, #ff6b9d, #e0245e);
+  color: white;
+  animation: btnPulse 1.5s ease-in-out infinite;
+}
+.btn-continue {
+  background: linear-gradient(180deg, #6bffb8, #00c853);
+  color: white;
+}
+@keyframes btnPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.btn-play:active { animation: none; transform: scale(0.95); }
+#hud {
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: 10px 15px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  font-family: 'Fredoka One', cursive;
+  color: white;
+  font-size: min(3.5vw, 20px);
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+  z-index: 10;
+}
+.hud-left, .hud-right { display: flex; flex-direction: column; gap: 5px; }
+.hud-center { text-align: center; }
+.health-bar-container {
+  width: min(30vw, 180px); height: 20px;
+  background: #333; border-radius: 10px;
+  border: 2px solid #fff;
+  overflow: hidden;
+}
+.health-bar {
+  height: 100%; border-radius: 8px;
+  transition: width 0.3s;
+}
+.health-bar.cat { background: linear-gradient(90deg, #4caf50, #8bc34a); }
+.health-bar.monster { background: linear-gradient(90deg, #f44336, #ff9800); }
+.lives { font-size: min(5vw, 28px); }
+#mobileControls {
+  position: absolute; bottom: 20px; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding: 0 20px;
+  z-index: 10;
+}
+.mobile-arrows {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.mobile-btn {
+  width: min(18vw, 80px); height: min(18vw, 80px);
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-size: min(8vw, 40px);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mobile-btn:active { background: rgba(255,255,255,0.4); }
+.attack-btn {
+  width: min(25vw, 110px); height: min(25vw, 110px);
+  border-radius: 50%;
+  border: 4px solid #ff6b9d;
+  background: radial-gradient(circle, #ff6b9d, #e0245e);
+  color: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: min(4vw, 22px);
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(255,107,157,0.5);
+  -webkit-tap-highlight-color: transparent;
+}
+.attack-btn:active { transform: scale(0.9); }
+#overlay {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.7);
+  z-index: 50;
+  text-align: center;
+  padding: 20px;
+}
+#overlay h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: min(10vw, 60px);
+  color: #ffd700;
+  text-shadow: 0 0 20px #ffd700;
+  margin-bottom: 15px;
+}
+#overlay p {
+  font-family: 'Nunito', sans-serif;
+  font-size: min(5vw, 28px);
+  color: white;
+  margin-bottom: 10px;
+}
+#overlay .weapon-unlock {
+  font-size: min(12vw, 80px);
+  margin: 15px 0;
+  animation: weaponBounce 0.5s ease-in-out infinite alternate;
+}
+@keyframes weaponBounce {
+  from { transform: scale(1) rotate(-5deg); }
+  to { transform: scale(1.2) rotate(5deg); }
+}
+#overlay .btn-next {
+  background: linear-gradient(180deg, #7c4dff, #536dfe);
+  color: white;
+  margin-top: 20px;
+}
+#overlay .btn-retry {
+  background: linear-gradient(180deg, #ff9800, #f57c00);
+  color: white;
+  margin-top: 20px;
+}
+.confetti-canvas {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 51;
+}
+.star { position: absolute; color: #fff; font-size: 2px; animation: twinkle 2s infinite; }
+@keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+#bossHealthContainer {
+  position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+  width: min(60vw, 350px);
+  z-index: 10;
+}
+#bossHealthContainer .boss-name {
+  font-family: 'Fredoka One', cursive;
+  color: white;
+  font-size: min(4vw, 22px);
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+  margin-bottom: 4px;
+}
+#bossHealthBar {
+  width: 100%; height: 24px;
+  background: #333; border-radius: 12px;
+  border: 3px solid #fff;
+  overflow: hidden;
+}
+#bossHealthBar .fill {
+  height: 100%; border-radius: 9px;
+  background: linear-gradient(90deg, #f44336, #ff5722, #ff9800);
+  transition: width 0.3s;
+}
+</style>
+</head>
+<body>
+
+<canvas id="gameCanvas"></canvas>
+<div id="ui">
+  <!-- TITLE SCREEN -->
+  <div id="titleScreen">
+    <div class="cat-hero">🐱🚀</div>
+    <h1>MichiCósmico</h1>
+    <div class="subtitle">¡Aventura Espacial Gatuna!</div>
+    <button class="btn btn-play" id="btnNewGame">🎮 ¡JUGAR!</button>
+    <button class="btn btn-continue hidden" id="btnContinue">▶️ Continuar</button>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div class="hud-left">
+      <div id="hudPlanet">🪐 Mercurio</div>
+      <div id="hudWeapon">🐾 Zarpazos</div>
+      <div>
+        <span>❤️ Michi:</span>
+        <div class="health-bar-container">
+          <div class="health-bar cat" id="catHealthBar" style="width:100%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="hud-center">
+      <div id="hudLevel">Nivel 1</div>
+      <div class="lives" id="hudLives">😺😺😺</div>
+    </div>
+    <div class="hud-right">
+      <div id="hudScore">⭐ 0</div>
+    </div>
+  </div>
+
+  <!-- BOSS HEALTH -->
+  <div id="bossHealthContainer" class="hidden">
+    <div class="boss-name" id="bossName">👾 Monstruo</div>
+    <div id="bossHealthBar"><div class="fill" id="bossHealthFill" style="width:100%"></div></div>
+  </div>
+
+  <!-- MOBILE CONTROLS -->
+  <div id="mobileControls" class="hidden">
+    <div class="mobile-arrows">
+      <button class="mobile-btn" id="btnUp">⬆️</button>
+      <button class="mobile-btn" id="btnDown">⬇️</button>
+    </div>
+    <button class="attack-btn hidden" id="btnAttack">⚔️<br>ATACAR</button>
+  </div>
+
+  <!-- OVERLAY -->
+  <div id="overlay" class="hidden"></div>
+</div>
+
+<script>
+// ============== AUDIO ENGINE ==============
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playSound(type) {
+  ensureAudio();
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  const g = audioCtx.createGain();
+  g.connect(audioCtx.destination);
+  const o = audioCtx.createOscillator();
+  o.connect(g);
+
+  switch(type) {
+    case 'attack':
+      o.type = 'square'; o.frequency.setValueAtTime(400, now);
+      o.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+      g.gain.setValueAtTime(0.15, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      o.start(now); o.stop(now + 0.15);
+      break;
+    case 'hit':
+      o.type = 'sawtooth'; o.frequency.setValueAtTime(200, now);
+      o.frequency.exponentialRampToValueAtTime(80, now + 0.2);
+      g.gain.setValueAtTime(0.15, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      o.start(now); o.stop(now + 0.2);
+      break;
+    case 'collect':
+      o.type = 'sine'; o.frequency.setValueAtTime(523, now);
+      o.frequency.setValueAtTime(659, now + 0.1);
+      o.frequency.setValueAtTime(784, now + 0.2);
+      o.frequency.setValueAtTime(1047, now + 0.3);
+      g.gain.setValueAtTime(0.15, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      o.start(now); o.stop(now + 0.5);
+      break;
+    case 'win':
+      o.type = 'sine';
+      [523, 659, 784, 1047, 1319].forEach((f, i) => {
+        o.frequency.setValueAtTime(f, now + i * 0.12);
+      });
+      g.gain.setValueAtTime(0.15, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+      o.start(now); o.stop(now + 0.8);
+      break;
+    case 'lose':
+      o.type = 'sawtooth'; o.frequency.setValueAtTime(300, now);
+      o.frequency.exponentialRampToValueAtTime(100, now + 0.5);
+      g.gain.setValueAtTime(0.12, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+      o.start(now); o.stop(now + 0.6);
+      break;
+    case 'dodge':
+      o.type = 'triangle'; o.frequency.setValueAtTime(600, now);
+      o.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+      g.gain.setValueAtTime(0.08, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      o.start(now); o.stop(now + 0.1);
+      break;
+    case 'explosion':
+      o.type = 'sawtooth'; o.frequency.setValueAtTime(150, now);
+      o.frequency.exponentialRampToValueAtTime(30, now + 0.4);
+      g.gain.setValueAtTime(0.2, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      o.start(now); o.stop(now + 0.4);
+      break;
+  }
+}
+
+// ============== GAME DATA ==============
+const PLANETS = [
+  { name: 'Mercurio', color: '#ff6b35', bgColor: '#2d1b00', emoji: '☿️' },
+  { name: 'Venus', color: '#ffd700', bgColor: '#2d2500', emoji: '♀️' },
+  { name: 'Marte', color: '#ff4444', bgColor: '#2d0000', emoji: '♂️' },
+  { name: 'Júpiter', color: '#ff8c00', bgColor: '#1a1200', emoji: '♃' },
+  { name: 'Saturno', color: '#daa520', bgColor: '#1a1600', emoji: '♄' },
+  { name: 'Urano', color: '#00ced1', bgColor: '#001a1a', emoji: '♅' },
+  { name: 'Neptuno', color: '#4169e1', bgColor: '#000a2d', emoji: '♆' },
+  { name: 'Plutón', color: '#9370db', bgColor: '#1a0030', emoji: '⯓' },
+];
+
+const MONSTER_COLORS = ['#4caf50', '#ffeb3b', '#ff9800', '#f44336', '#9c27b0', '#1a237e', '#212121', '#ffffff'];
+const MONSTER_NAMES = [
+  'Monstruo Verde', 'Monstruo Amarillo', 'Monstruo Naranja', 'Monstruo Rojo',
+  'Monstruo Morado', 'Monstruo Azul Oscuro', 'Monstruo Negro', 'Monstruo Brillante'
+];
+const MONSTER_EMOJIS = ['👾', '👹', '🤖', '👺', '🦑', '🐙', '💀', '⚡'];
+
+const WEAPONS = [
+  { name: 'Zarpazos', emoji: '🐾', damage: 5, type: 'ranged', desc: 'Arañazos gatunos' },
+  { name: 'Collar Estelar', emoji: '⭐', damage: 6, type: 'ranged', desc: '+1 daño estelar' },
+  { name: 'Bola de Lana Espacial', emoji: '🧶', damage: 7, type: 'ranged', desc: 'Ataque a distancia' },
+  { name: 'Espada Gatuna', emoji: '⚔️', damage: 9, type: 'ranged', desc: '+2 daño cortante' },
+  { name: 'Bigotes Láser', emoji: '💥', damage: 11, type: 'beam', desc: 'Rayo láser' },
+  { name: 'Anillo de Saturno', emoji: '💫', damage: 13, type: 'shield', desc: 'Escudo + ataque' },
+  { name: 'Cola Tornado', emoji: '🌪️', damage: 15, type: 'area', desc: 'Ataque de área' },
+  { name: 'Maullido Cósmico', emoji: '🔊', damage: 18, type: 'ultimate', desc: '¡Ataque definitivo!' },
+];
+
+const ENCOURAGEMENTS = [
+  '¡Tú puedes, gatito!', '¡Sigue adelante!', '¡Eres increíble!',
+  '¡Vamos con todo!', '¡Michi poderoso!', '¡No te rindas!',
+];
+
+// ============== GAME STATE ==============
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+let gameState = 'title'; // title, space, boss, overlay
+let currentLevel = 0;
+let lives = 3;
+let score = 0;
+let weaponIndex = 0;
+let catY, catX, catVY;
+let catHealth, catMaxHealth;
+let meteorites = [];
+let spaceTimer, spaceDuration;
+let stars = [];
+let particles = [];
+let projectiles = [];
+let bossHealth, bossMaxHealth;
+let bossX, bossY, bossVY;
+let bossAttackTimer;
+let catAttackCooldown = 0;
+let catInvincible = 0;
+let shakeTimer = 0;
+let bossHitFlash = 0;
+let catProjectiles = [];
+let transitionAlpha = 0;
+let transitionState = null; // 'fadeOut', 'fadeIn'
+let transitionCallback = null;
+let bossDyingTimer = 0;
+let bossDyingDuration = 120; // frames (~2 seconds)
+let bossDyingX = 0, bossDyingY = 0, bossDyingSize = 0, bossDyingLevel = 0;
+let planetSurface = null;
+let keys = {};
+let touchY = null;
+let isMobile = false;
+
+// Check mobile
+function checkMobile() {
+  isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  document.getElementById('mobileControls').classList.toggle('hidden', !isMobile);
+}
+checkMobile();
+
+// Stars background
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 150; i++) {
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      size: Math.random() * 2.5 + 0.5,
+      speed: Math.random() * 0.5 + 0.1,
+      twinkle: Math.random() * Math.PI * 2,
+      twinkleSpeed: Math.random() * 2 + 1,
+    });
+  }
+}
+initStars();
+
+// ============== SAVE/LOAD ==============
+function saveProgress() {
+  localStorage.setItem('michicosmico', JSON.stringify({
+    level: currentLevel, score, weaponIndex, lives
+  }));
+}
+function loadProgress() {
+  try {
+    const d = JSON.parse(localStorage.getItem('michicosmico'));
+    if (d && d.level > 0) return d;
+  } catch(e) {}
+  return null;
+}
+
+// ============== PARTICLES ==============
+function spawnParticles(x, y, count, color, speed = 3) {
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const spd = Math.random() * speed + 1;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * spd,
+      vy: Math.sin(angle) * spd,
+      life: 1,
+      decay: Math.random() * 0.03 + 0.015,
+      size: Math.random() * 6 + 3,
+      color,
+    });
+  }
+}
+
+function spawnConfetti(x, y) {
+  const colors = ['#ff6b9d', '#ffd700', '#4caf50', '#00bcd4', '#ff9800', '#9c27b0', '#ff5722', '#2196f3'];
+  for (let i = 0; i < 60; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const spd = Math.random() * 8 + 2;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * spd,
+      vy: Math.sin(angle) * spd - 3,
+      life: 1,
+      decay: Math.random() * 0.008 + 0.005,
+      size: Math.random() * 8 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      confetti: true,
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.3,
+    });
+  }
+}
+
+// ============== DRAWING HELPERS ==============
+function drawStar(cx, cy, spikes, outerR, innerR, color) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.fillStyle = color;
+  let rot = -Math.PI / 2;
+  for (let i = 0; i < spikes; i++) {
+    ctx.lineTo(cx + Math.cos(rot) * outerR, cy + Math.sin(rot) * outerR);
+    rot += Math.PI / spikes;
+    ctx.lineTo(cx + Math.cos(rot) * innerR, cy + Math.sin(rot) * innerR);
+    rot += Math.PI / spikes;
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawCat(x, y, size, hurt = false) {
+  ctx.save();
+  ctx.translate(x, y);
+
+  const s = size;
+  const tabby = hurt ? '#cc5555' : '#8B7355';
+  const tabbyDark = hurt ? '#aa4444' : '#6B5340';
+  const white = hurt ? '#ff9999' : '#F5F0E8';
+  const warmWhite = hurt ? '#ffaaaa' : '#FDF8F0';
+
+  // Fluffy tail (thick, bushy tabby tail)
+  ctx.strokeStyle = tabby;
+  ctx.lineWidth = s * 0.14;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(-s * 0.42, s * 0.05);
+  ctx.bezierCurveTo(-s * 0.6, -s * 0.15, -s * 0.72, -s * 0.35, -s * 0.5, -s * 0.5);
+  ctx.stroke();
+  // Tail fur edge (fluffiness)
+  ctx.strokeStyle = tabbyDark;
+  ctx.lineWidth = s * 0.18;
+  ctx.globalAlpha = 0.3;
+  ctx.beginPath();
+  ctx.moveTo(-s * 0.42, s * 0.05);
+  ctx.bezierCurveTo(-s * 0.6, -s * 0.15, -s * 0.72, -s * 0.35, -s * 0.5, -s * 0.5);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+  // Tail stripes
+  ctx.strokeStyle = tabbyDark;
+  ctx.lineWidth = s * 0.03;
+  for (let i = 0; i < 4; i++) {
+    const t = 0.25 + i * 0.18;
+    const tx = -s * 0.42 + (-s * 0.15) * t * 2;
+    const ty = s * 0.05 + (-s * 0.35) * t;
+    ctx.beginPath();
+    ctx.moveTo(tx - s * 0.06, ty - s * 0.05);
+    ctx.lineTo(tx + s * 0.06, ty + s * 0.05);
+    ctx.stroke();
+  }
+
+  // Body - tabby brown base (fluffy, slightly larger)
+  ctx.fillStyle = tabby;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, s * 0.52, s * 0.48, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Fur texture on body (small spikes around edge for fluffiness)
+  ctx.fillStyle = tabby;
+  for (let i = 0; i < 16; i++) {
+    const angle = (i / 16) * Math.PI * 2;
+    const fx = Math.cos(angle) * s * 0.50;
+    const fy = Math.sin(angle) * s * 0.46;
+    ctx.beginPath();
+    ctx.ellipse(fx, fy, s * 0.06, s * 0.04, angle, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // White chest/belly
+  ctx.fillStyle = white;
+  ctx.beginPath();
+  ctx.ellipse(s * 0.05, s * 0.1, s * 0.28, s * 0.32, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Tabby stripes on body
+  ctx.strokeStyle = tabbyDark;
+  ctx.lineWidth = s * 0.025;
+  ctx.globalAlpha = 0.5;
+  for (let i = 0; i < 5; i++) {
+    const sx = -s * 0.2 + i * s * 0.12;
+    ctx.beginPath();
+    ctx.moveTo(sx, -s * 0.35);
+    ctx.quadraticCurveTo(sx + s * 0.03, -s * 0.15, sx - s * 0.02, -s * 0.02);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  // White front paws
+  ctx.fillStyle = warmWhite;
+  ctx.beginPath();
+  ctx.ellipse(s * 0.25, s * 0.38, s * 0.1, s * 0.08, 0.2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(-s * 0.15, s * 0.38, s * 0.1, s * 0.08, -0.2, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Head - tabby base (bigger for fluffy face)
+  ctx.fillStyle = tabby;
+  ctx.beginPath();
+  ctx.arc(s * 0.35, -s * 0.05, s * 0.34, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Fluffy cheek fur (makes head look fluffier)
+  ctx.fillStyle = tabby;
+  ctx.beginPath();
+  ctx.ellipse(s * 0.12, s * 0.05, s * 0.12, s * 0.1, -0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(s * 0.58, s * 0.05, s * 0.12, s * 0.1, 0.3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // White muzzle area
+  ctx.fillStyle = warmWhite;
+  ctx.beginPath();
+  ctx.ellipse(s * 0.35, s * 0.06, s * 0.18, s * 0.16, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // White stripe between eyes (like the photo)
+  ctx.fillStyle = warmWhite;
+  ctx.beginPath();
+  ctx.moveTo(s * 0.30, -s * 0.28);
+  ctx.quadraticCurveTo(s * 0.35, -s * 0.15, s * 0.35, -s * 0.02);
+  ctx.quadraticCurveTo(s * 0.35, -s * 0.15, s * 0.40, -s * 0.28);
+  ctx.fill();
+
+  // Tabby forehead stripes (M pattern)
+  ctx.strokeStyle = tabbyDark;
+  ctx.lineWidth = s * 0.02;
+  ctx.globalAlpha = 0.6;
+  // M shape on forehead
+  ctx.beginPath();
+  ctx.moveTo(s * 0.20, -s * 0.18);
+  ctx.lineTo(s * 0.27, -s * 0.28);
+  ctx.lineTo(s * 0.33, -s * 0.20);
+  ctx.lineTo(s * 0.37, -s * 0.28);
+  ctx.lineTo(s * 0.42, -s * 0.20);
+  ctx.lineTo(s * 0.48, -s * 0.28);
+  ctx.lineTo(s * 0.50, -s * 0.18);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+
+  // Ears (fluffy, tabby-colored with fur tufts)
+  ctx.fillStyle = tabby;
+  ctx.beginPath();
+  ctx.moveTo(s * 0.18, -s * 0.28);
+  ctx.lineTo(s * 0.10, -s * 0.58);
+  ctx.lineTo(s * 0.38, -s * 0.32);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(s * 0.40, -s * 0.32);
+  ctx.lineTo(s * 0.55, -s * 0.58);
+  ctx.lineTo(s * 0.58, -s * 0.26);
+  ctx.fill();
+
+  // Inner ears (pink)
+  ctx.fillStyle = hurt ? '#ff8888' : '#E8B4B8';
+  ctx.beginPath();
+  ctx.moveTo(s * 0.21, -s * 0.30);
+  ctx.lineTo(s * 0.15, -s * 0.48);
+  ctx.lineTo(s * 0.34, -s * 0.32);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(s * 0.42, -s * 0.32);
+  ctx.lineTo(s * 0.52, -s * 0.48);
+  ctx.lineTo(s * 0.54, -s * 0.27);
+  ctx.fill();
+
+  // Ear fur tufts (fluffy tips)
+  ctx.fillStyle = warmWhite;
+  ctx.beginPath();
+  ctx.ellipse(s * 0.14, -s * 0.50, s * 0.04, s * 0.025, -0.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(s * 0.53, -s * 0.50, s * 0.04, s * 0.025, 0.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Eyes - large green-golden (like the photo)
+  ctx.fillStyle = '#C8D080';
+  ctx.beginPath();
+  ctx.ellipse(s * 0.26, -s * 0.10, s * 0.09, s * 0.11, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(s * 0.44, -s * 0.10, s * 0.09, s * 0.11, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Eye gradient ring (golden-green iris detail)
+  ctx.strokeStyle = '#8B9A46';
+  ctx.lineWidth = s * 0.015;
+  ctx.beginPath();
+  ctx.ellipse(s * 0.26, -s * 0.10, s * 0.07, s * 0.085, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(s * 0.44, -s * 0.10, s * 0.07, s * 0.085, 0, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Pupils (vertical slit like a cat)
+  ctx.fillStyle = '#222';
+  ctx.beginPath();
+  ctx.ellipse(s * 0.27, -s * 0.09, s * 0.025, s * 0.08, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(s * 0.45, -s * 0.09, s * 0.025, s * 0.08, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Eye shine
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.arc(s * 0.24, -s * 0.13, s * 0.025, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(s * 0.42, -s * 0.13, s * 0.025, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Eye outline
+  ctx.strokeStyle = tabbyDark;
+  ctx.lineWidth = s * 0.012;
+  ctx.beginPath();
+  ctx.ellipse(s * 0.26, -s * 0.10, s * 0.09, s * 0.11, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(s * 0.44, -s * 0.10, s * 0.09, s * 0.11, 0, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Pink nose
+  ctx.fillStyle = hurt ? '#ff6666' : '#FFB0B8';
+  ctx.beginPath();
+  ctx.moveTo(s * 0.35, s * 0.0);
+  ctx.quadraticCurveTo(s * 0.32, s * 0.05, s * 0.33, s * 0.06);
+  ctx.lineTo(s * 0.37, s * 0.06);
+  ctx.quadraticCurveTo(s * 0.38, s * 0.05, s * 0.35, s * 0.0);
+  ctx.fill();
+  // Nose highlight
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.beginPath();
+  ctx.arc(s * 0.35, s * 0.02, s * 0.015, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Mouth
+  ctx.strokeStyle = '#8B7060';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(s * 0.35, s * 0.06);
+  ctx.lineTo(s * 0.32, s * 0.11);
+  ctx.moveTo(s * 0.35, s * 0.06);
+  ctx.lineTo(s * 0.38, s * 0.11);
+  ctx.stroke();
+
+  // Long white whiskers (prominent like the photo - 3 per side)
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.lineWidth = s * 0.012;
+  ctx.lineCap = 'round';
+  // Left whiskers
+  ctx.beginPath();
+  ctx.moveTo(s * 0.18, -s * 0.01); ctx.lineTo(-s * 0.12, -s * 0.10);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(s * 0.17, s * 0.03); ctx.lineTo(-s * 0.14, s * 0.02);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(s * 0.18, s * 0.07); ctx.lineTo(-s * 0.10, s * 0.14);
+  ctx.stroke();
+  // Right whiskers
+  ctx.beginPath();
+  ctx.moveTo(s * 0.52, -s * 0.01); ctx.lineTo(s * 0.82, -s * 0.10);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(s * 0.53, s * 0.03); ctx.lineTo(s * 0.84, s * 0.02);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(s * 0.52, s * 0.07); ctx.lineTo(s * 0.80, s * 0.14);
+  ctx.stroke();
+
+  // Helmet (space cat!)
+  ctx.strokeStyle = 'rgba(100, 200, 255, 0.5)';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(s * 0.35, -s * 0.05, s * 0.40, 0, Math.PI * 2);
+  ctx.stroke();
+  // Helmet shine
+  ctx.strokeStyle = 'rgba(180, 230, 255, 0.25)';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(s * 0.35, -s * 0.05, s * 0.40, -Math.PI * 0.7, -Math.PI * 0.3);
+  ctx.stroke();
+
+  // Weapon glow
+  if (weaponIndex > 0) {
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+    ctx.beginPath();
+    ctx.arc(s * 0.35, s * 0.15, s * 0.15, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function drawMonster(x, y, size, color, level, flash = false) {
+  ctx.save();
+  ctx.translate(x, y);
+  const s = size;
+
+  // Glow
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 20;
+
+  // Body
+  ctx.fillStyle = flash ? '#fff' : color;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, s * 0.5, s * 0.45, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Tentacles/legs
+  for (let i = 0; i < 4; i++) {
+    const angle = Math.PI * 0.6 + (i / 3) * Math.PI * 0.8;
+    const waveOff = Math.sin(Date.now() * 0.005 + i) * s * 0.05;
+    ctx.strokeStyle = flash ? '#fff' : color;
+    ctx.lineWidth = s * 0.08;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    const sx = Math.cos(angle) * s * 0.4;
+    const sy = Math.sin(angle) * s * 0.4;
+    ctx.moveTo(sx, sy);
+    ctx.quadraticCurveTo(sx + waveOff, sy + s * 0.25, sx + waveOff * 2, sy + s * 0.4);
+    ctx.stroke();
+  }
+
+  // Horns/antennae based on level
+  if (level >= 2) {
+    ctx.fillStyle = flash ? '#fff' : color;
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.2, -s * 0.4);
+    ctx.lineTo(-s * 0.35, -s * 0.7);
+    ctx.lineTo(-s * 0.05, -s * 0.45);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(s * 0.2, -s * 0.4);
+    ctx.lineTo(s * 0.35, -s * 0.7);
+    ctx.lineTo(s * 0.05, -s * 0.45);
+    ctx.fill();
+  }
+
+  // Eyes
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.ellipse(-s * 0.15, -s * 0.08, s * 0.12, s * 0.14, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(s * 0.15, -s * 0.08, s * 0.12, s * 0.14, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Pupils (looking at cat)
+  ctx.fillStyle = level >= 6 ? '#f00' : '#333';
+  ctx.beginPath();
+  ctx.arc(-s * 0.17, -s * 0.06, s * 0.06, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(s * 0.13, -s * 0.06, s * 0.06, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Cute mouth
+  if (level < 4) {
+    // Smile
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, s * 0.08, s * 0.12, 0.1, Math.PI - 0.1);
+    ctx.stroke();
+  } else {
+    // Teeth
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.12, s * 0.08);
+    ctx.lineTo(-s * 0.06, s * 0.18);
+    ctx.lineTo(0, s * 0.08);
+    ctx.lineTo(s * 0.06, s * 0.18);
+    ctx.lineTo(s * 0.12, s * 0.08);
+    ctx.fill();
+  }
+
+  // Extra eyes for higher levels
+  if (level >= 5) {
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(0, -s * 0.25, s * 0.07, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#f00';
+    ctx.beginPath();
+    ctx.arc(0, -s * 0.24, s * 0.035, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Crown for last boss
+  if (level === 7) {
+    ctx.fillStyle = '#ffd700';
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.25, -s * 0.42);
+    ctx.lineTo(-s * 0.15, -s * 0.6);
+    ctx.lineTo(-s * 0.05, -s * 0.45);
+    ctx.lineTo(s * 0.05, -s * 0.65);
+    ctx.lineTo(s * 0.15, -s * 0.45);
+    ctx.lineTo(s * 0.25, -s * 0.6);
+    ctx.lineTo(s * 0.3, -s * 0.42);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function drawMeteorite(x, y, size) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(Date.now() * 0.003 + x);
+
+  // Glow
+  ctx.shadowColor = '#ff4400';
+  ctx.shadowBlur = 15;
+
+  ctx.fillStyle = '#8d6e63';
+  ctx.beginPath();
+  const points = 7;
+  for (let i = 0; i < points; i++) {
+    const angle = (i / points) * Math.PI * 2;
+    const r = size * (0.7 + Math.sin(i * 2.5) * 0.3);
+    if (i === 0) ctx.moveTo(Math.cos(angle) * r, Math.sin(angle) * r);
+    else ctx.lineTo(Math.cos(angle) * r, Math.sin(angle) * r);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Craters
+  ctx.fillStyle = '#5d4037';
+  ctx.beginPath();
+  ctx.arc(-size * 0.15, -size * 0.1, size * 0.15, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(size * 0.2, size * 0.15, size * 0.1, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Fire trail
+  ctx.fillStyle = 'rgba(255, 100, 0, 0.6)';
+  ctx.beginPath();
+  ctx.moveTo(size * 0.5, -size * 0.3);
+  ctx.lineTo(size * 1.2, 0);
+  ctx.lineTo(size * 0.5, size * 0.3);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255, 200, 0, 0.4)';
+  ctx.beginPath();
+  ctx.moveTo(size * 0.5, -size * 0.15);
+  ctx.lineTo(size * 0.9, 0);
+  ctx.lineTo(size * 0.5, size * 0.15);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawProjectile(p) {
+  ctx.save();
+  ctx.translate(p.x, p.y);
+
+  if (p.fromCat) {
+    const w = WEAPONS[weaponIndex];
+    ctx.shadowColor = '#ffd700';
+    ctx.shadowBlur = 10;
+    ctx.fillStyle = '#ffd700';
+    ctx.font = `${p.size || 20}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(w.emoji, 0, 0);
+    ctx.shadowBlur = 0;
+  } else {
+    ctx.fillStyle = '#ff0044';
+    ctx.shadowColor = '#ff0044';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(0, 0, p.size || 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+
+  ctx.restore();
+}
+
+// ============== GAME LOGIC ==============
+function startSpacePhase() {
+  gameState = 'space';
+  const catSize = Math.min(W, H) * 0.08;
+  catX = W * 0.1;
+  catY = H * 0.5;
+  catVY = 0;
+  catHealth = 100;
+  catMaxHealth = 100;
+  catInvincible = 0;
+  meteorites = [];
+  catProjectiles = [];
+  projectiles = [];
+  particles = [];
+  spaceDuration = (4 + currentLevel * 1.5) * 60; // frames
+  spaceTimer = 0;
+
+  document.getElementById('hud').classList.remove('hidden');
+  document.getElementById('bossHealthContainer').classList.add('hidden');
+  document.getElementById('btnAttack').classList.add('hidden');
+  if (isMobile) document.getElementById('mobileControls').classList.remove('hidden');
+  updateHUD();
+}
+
+function startBossPhase() {
+  gameState = 'boss';
+  const catSize = Math.min(W, H) * 0.08;
+  catX = W * 0.2;
+  catY = H * 0.5;
+  catVY = 0;
+  catHealth = 100;
+  catMaxHealth = 100;
+  catInvincible = 0;
+  catAttackCooldown = 0;
+  catProjectiles = [];
+  projectiles = [];
+  particles = [];
+
+  bossMaxHealth = 80 + currentLevel * 40;
+  bossHealth = bossMaxHealth;
+  bossX = W * 0.75;
+  bossY = H * 0.4;
+  bossVY = 1.5 + currentLevel * 0.3;
+  bossAttackTimer = 120 - currentLevel * 8;
+  bossHitFlash = 0;
+
+  document.getElementById('hud').classList.remove('hidden');
+  document.getElementById('bossHealthContainer').classList.remove('hidden');
+  document.getElementById('btnAttack').classList.remove('hidden');
+  if (isMobile) document.getElementById('mobileControls').classList.remove('hidden');
+  updateBossHUD();
+  updateHUD();
+}
+
+function updateHUD() {
+  const planet = PLANETS[currentLevel];
+  const weapon = WEAPONS[weaponIndex];
+  document.getElementById('hudPlanet').textContent = `🪐 ${planet.name}`;
+  document.getElementById('hudWeapon').textContent = `${weapon.emoji} ${weapon.name}`;
+  document.getElementById('hudLevel').textContent = `Nivel ${currentLevel + 1}`;
+  document.getElementById('hudScore').textContent = `⭐ ${score}`;
+
+  let livesStr = '';
+  for (let i = 0; i < 3; i++) livesStr += i < lives ? '😺' : '💔';
+  document.getElementById('hudLives').textContent = livesStr;
+
+  const pct = Math.max(0, catHealth / catMaxHealth * 100);
+  document.getElementById('catHealthBar').style.width = pct + '%';
+}
+
+function updateBossHUD() {
+  const pct = Math.max(0, bossHealth / bossMaxHealth * 100);
+  document.getElementById('bossHealthFill').style.width = pct + '%';
+  document.getElementById('bossName').textContent = `${MONSTER_EMOJIS[currentLevel]} ${MONSTER_NAMES[currentLevel]}`;
+}
+
+function catAttack() {
+  if (catAttackCooldown > 0) return;
+  playSound('attack');
+  catAttackCooldown = 20;
+  const w = WEAPONS[weaponIndex];
+
+  {
+    // All weapons shoot projectiles that aim at the boss
+    const angle = Math.atan2(bossY - catY, bossX - catX);
+    const speed = 14 + currentLevel * 0.5;
+    catProjectiles.push({
+      x: catX + 40,
+      y: catY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      damage: w.damage,
+      fromCat: true,
+      size: 26,
+      life: 180,
+    });
+    if (w.type === 'area') {
+      catProjectiles.push({ x: catX + 40, y: catY, vx: Math.cos(angle - 0.3) * speed, vy: Math.sin(angle - 0.3) * speed, damage: w.damage * 0.7, fromCat: true, size: 22, life: 150 });
+      catProjectiles.push({ x: catX + 40, y: catY, vx: Math.cos(angle + 0.3) * speed, vy: Math.sin(angle + 0.3) * speed, damage: w.damage * 0.7, fromCat: true, size: 22, life: 150 });
+    }
+    if (w.type === 'ultimate') {
+      for (let i = -2; i <= 2; i++) {
+        const a = angle + i * 0.15;
+        catProjectiles.push({ x: catX + 40, y: catY, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, damage: w.damage * 0.6, fromCat: true, size: 22, life: 150 });
+      }
+    }
+    if (w.type === 'beam') {
+      catProjectiles.push({ x: catX + 40, y: catY, vx: Math.cos(angle) * 20, vy: Math.sin(angle) * 20, damage: w.damage, fromCat: true, size: 30, life: 120 });
+    }
+  }
+}
+
+function damageBoss(dmg) {
+  bossHealth -= dmg;
+  bossHitFlash = 8;
+  shakeTimer = 5;
+  spawnParticles(bossX, bossY, 8, MONSTER_COLORS[currentLevel], 5);
+  playSound('hit');
+  if (bossHealth <= 0) {
+    bossHealth = 0;
+    startBossDeath();
+  }
+  updateBossHUD();
+}
+
+function startBossDeath() {
+  gameState = 'bossDying';
+  bossDyingTimer = 0;
+  bossDyingDuration = 120;
+  bossDyingX = bossX;
+  bossDyingY = bossY;
+  bossDyingSize = Math.min(W, H) * (0.1 + currentLevel * 0.01);
+  bossDyingLevel = currentLevel;
+  projectiles = [];
+  catProjectiles = [];
+  document.getElementById('btnAttack').classList.add('hidden');
+  playSound('explosion');
+}
+
+function damageCat(dmg) {
+  if (catInvincible > 0) return;
+  catHealth -= dmg;
+  catInvincible = 45;
+  shakeTimer = 8;
+  spawnParticles(catX, catY, 6, '#ff4444', 4);
+  playSound('hit');
+  if (catHealth <= 0) {
+    catHealth = 0;
+    loseLife();
+  }
+  updateHUD();
+}
+
+function loseLife() {
+  lives--;
+  updateHUD();
+  if (lives <= 0) {
+    gameOver();
+  } else {
+    showOverlay(
+      '¡Auch!',
+      `${ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)]}<br>Te quedan ${lives} vida${lives > 1 ? 's' : ''}`,
+      '🐱💫',
+      '¡Reintentar!',
+      'retry',
+      () => {
+        if (gameState === 'boss' || gameState === 'overlay') startBossPhase();
+        else startSpacePhase();
+      }
+    );
+    playSound('lose');
+  }
+}
+
+function gameOver() {
+  playSound('lose');
+  showOverlay(
+    '¡Oh no!',
+    '¡El gatito necesita descansar!<br>¡Inténtalo de nuevo!',
+    '😿',
+    '¡Jugar de nuevo!',
+    'retry',
+    () => {
+      lives = 3;
+      currentLevel = 0;
+      weaponIndex = 0;
+      score = 0;
+      saveProgress();
+      startSpacePhase();
+    }
+  );
+}
+
+function winLevel() {
+  playSound('win');
+  score += (currentLevel + 1) * 100;
+  spawnConfetti(W / 2, H / 2);
+
+  const nextWeapon = currentLevel + 1 < WEAPONS.length ? WEAPONS[currentLevel + 1] : null;
+
+  if (currentLevel >= PLANETS.length - 1) {
+    // Game complete!
+    saveProgress();
+    showOverlay(
+      '🎉 ¡VICTORIA TOTAL! 🎉',
+      '¡Salvaste toda la galaxia!<br>¡Eres el mejor gatito espacial del universo!',
+      '🐱👑🌟',
+      '¡Jugar de nuevo!',
+      'next',
+      () => {
+        currentLevel = 0;
+        weaponIndex = 0;
+        lives = 3;
+        score = 0;
+        localStorage.removeItem('michicosmico');
+        startSpacePhase();
+      }
+    );
+    return;
+  }
+
+  if (nextWeapon) {
+    weaponIndex = currentLevel + 1;
+  }
+  currentLevel++;
+  saveProgress();
+
+  let msg = `¡Derrotaste al monstruo de ${PLANETS[currentLevel - 1].name}!`;
+  let weaponMsg = '';
+  if (nextWeapon) {
+    msg += `<br><br>🎁 ¡Nueva arma desbloqueada!`;
+    weaponMsg = `<div class="weapon-unlock">${nextWeapon.emoji}</div><p style="color:#ffd700;font-size:min(5vw,28px)">${nextWeapon.name}<br><small>${nextWeapon.desc}</small></p>`;
+  }
+
+  showOverlay(
+    '¡GANASTE!',
+    msg + weaponMsg,
+    '',
+    `¡Vamos a ${PLANETS[currentLevel].name}! 🚀`,
+    'next',
+    () => {
+      startSpacePhase();
+    }
+  );
+  playSound('collect');
+}
+
+function showOverlay(title, body, emoji, btnText, btnClass, callback) {
+  gameState = 'overlay';
+  const overlay = document.getElementById('overlay');
+  overlay.classList.remove('hidden');
+  overlay.innerHTML = `
+    <h2>${title}</h2>
+    ${emoji ? `<div style="font-size:min(15vw,90px)">${emoji}</div>` : ''}
+    <p>${body}</p>
+    <button class="btn btn-${btnClass}" id="overlayBtn">${btnText}</button>
+  `;
+  document.getElementById('overlayBtn').addEventListener('click', () => {
+    ensureAudio();
+    overlay.classList.add('hidden');
+    callback();
+  });
+  document.getElementById('bossHealthContainer').classList.add('hidden');
+  document.getElementById('btnAttack').classList.add('hidden');
+}
+
+// ============== SPACE PHASE UPDATE ==============
+function updateSpace(dt) {
+  spaceTimer++;
+  const catSize = Math.min(W, H) * 0.08;
+  const speed = 5;
+
+  // Cat movement
+  if (keys['ArrowUp'] || keys['w'] || mobileUp) catVY = -speed;
+  else if (keys['ArrowDown'] || keys['s'] || mobileDown) catVY = speed;
+  else catVY *= 0.85;
+
+  catY += catVY;
+  catY = Math.max(catSize, Math.min(H - catSize, catY));
+
+  if (catInvincible > 0) catInvincible--;
+
+  // Spawn meteorites
+  const spawnRate = Math.max(15, 45 - currentLevel * 4);
+  if (spaceTimer % spawnRate === 0) {
+    const mSize = 15 + Math.random() * 25 + currentLevel * 3;
+    meteorites.push({
+      x: W + mSize,
+      y: Math.random() * (H - 100) + 50,
+      vx: -(3 + Math.random() * 3 + currentLevel * 0.5),
+      vy: (Math.random() - 0.5) * 2,
+      size: mSize,
+    });
+  }
+
+  // Update meteorites
+  for (let i = meteorites.length - 1; i >= 0; i--) {
+    const m = meteorites[i];
+    m.x += m.vx;
+    m.y += m.vy;
+    if (m.x < -60) { meteorites.splice(i, 1); continue; }
+
+    // Collision with cat
+    const dist = Math.hypot(m.x - catX, m.y - catY);
+    if (dist < catSize * 0.5 + m.size * 0.5) {
+      damageCat(15 + currentLevel * 2);
+      meteorites.splice(i, 1);
+      spawnParticles(m.x, m.y, 10, '#ff6600', 5);
+      playSound('explosion');
+    }
+  }
+
+  // Progress bar / transition to boss
+  if (spaceTimer >= spaceDuration) {
+    startBossPhase();
+  }
+
+  // Draw progress
+  const progress = spaceTimer / spaceDuration;
+  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  ctx.fillRect(W * 0.2, 60, W * 0.6, 10);
+  ctx.fillStyle = '#00e5ff';
+  ctx.fillRect(W * 0.2, 60, W * 0.6 * progress, 10);
+  ctx.fillStyle = '#fff';
+  ctx.font = `bold ${Math.min(W * 0.03, 16)}px Nunito`;
+  ctx.textAlign = 'center';
+  ctx.fillText(`Viajando a ${PLANETS[currentLevel].name}...`, W * 0.5, 56);
+
+  // Draw planet in distance
+  const planetScale = 0.3 + progress * 0.7;
+  const planetX = W * 0.85 + (1 - progress) * W * 0.1;
+  const planetY = H * 0.3;
+  ctx.fillStyle = PLANETS[currentLevel].color;
+  ctx.shadowColor = PLANETS[currentLevel].color;
+  ctx.shadowBlur = 30 * planetScale;
+  ctx.beginPath();
+  ctx.arc(planetX, planetY, 30 * planetScale, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Draw meteorites
+  meteorites.forEach(m => drawMeteorite(m.x, m.y, m.size));
+
+  // Draw cat
+  const hurt = catInvincible > 0 && Math.floor(catInvincible / 4) % 2 === 0;
+  if (!(catInvincible > 0 && Math.floor(catInvincible / 3) % 2 === 0)) {
+    drawCat(catX, catY, catSize, hurt);
+  }
+}
+
+// ============== BOSS PHASE UPDATE ==============
+let mobileUp = false, mobileDown = false;
+
+function updateBoss(dt) {
+  const catSize = Math.min(W, H) * 0.08;
+  const bossSize = Math.min(W, H) * (0.1 + currentLevel * 0.01);
+  const speed = 5;
+
+  // Cat movement
+  if (keys['ArrowUp'] || keys['w'] || mobileUp) catVY = -speed;
+  else if (keys['ArrowDown'] || keys['s'] || mobileDown) catVY = speed;
+  else catVY *= 0.85;
+
+  catY += catVY;
+  catY = Math.max(catSize, Math.min(H - catSize, catY));
+
+  if (catInvincible > 0) catInvincible--;
+  if (catAttackCooldown > 0) catAttackCooldown--;
+  if (bossHitFlash > 0) bossHitFlash--;
+
+  // Auto-attack for melee (keyboard/space)
+  if (keys[' '] || keys['Space']) {
+    catAttack();
+  }
+
+  // Boss movement
+  bossY += bossVY;
+  if (bossY < bossSize || bossY > H - bossSize) bossVY *= -1;
+
+  // Boss attack
+  bossAttackTimer--;
+  if (bossAttackTimer <= 0) {
+    bossAttackTimer = Math.max(40, 100 - currentLevel * 8);
+    // Boss fires projectile at cat
+    const angle = Math.atan2(catY - bossY, catX - bossX);
+    const spd = 4 + currentLevel * 0.5;
+    projectiles.push({
+      x: bossX - bossSize * 0.5,
+      y: bossY,
+      vx: Math.cos(angle) * spd,
+      vy: Math.sin(angle) * spd,
+      size: 8 + currentLevel,
+      fromCat: false,
+      life: 200,
+    });
+    // Extra projectiles for harder levels
+    if (currentLevel >= 3) {
+      projectiles.push({
+        x: bossX - bossSize * 0.5, y: bossY,
+        vx: Math.cos(angle + 0.2) * spd, vy: Math.sin(angle + 0.2) * spd,
+        size: 6, fromCat: false, life: 150,
+      });
+      projectiles.push({
+        x: bossX - bossSize * 0.5, y: bossY,
+        vx: Math.cos(angle - 0.2) * spd, vy: Math.sin(angle - 0.2) * spd,
+        size: 6, fromCat: false, life: 150,
+      });
+    }
+    if (currentLevel >= 6) {
+      for (let i = -1; i <= 1; i += 2) {
+        projectiles.push({
+          x: bossX - bossSize * 0.5, y: bossY,
+          vx: Math.cos(angle + i * 0.4) * spd, vy: Math.sin(angle + i * 0.4) * spd,
+          size: 6, fromCat: false, life: 120,
+        });
+      }
+    }
+  }
+
+  // Update cat projectiles
+  for (let i = catProjectiles.length - 1; i >= 0; i--) {
+    const p = catProjectiles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life--;
+    if (p.life <= 0 || p.x > W + 50) { catProjectiles.splice(i, 1); continue; }
+
+    // Hit boss?
+    const dist = Math.hypot(p.x - bossX, p.y - bossY);
+    if (dist < bossSize * 0.7 + 20) {
+      damageBoss(p.damage);
+      catProjectiles.splice(i, 1);
+    }
+  }
+
+  // Update boss projectiles
+  for (let i = projectiles.length - 1; i >= 0; i--) {
+    const p = projectiles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life--;
+    if (p.life <= 0 || p.x < -50 || p.y < -50 || p.y > H + 50) {
+      projectiles.splice(i, 1);
+      continue;
+    }
+
+    // Hit cat?
+    const dist = Math.hypot(p.x - catX, p.y - catY);
+    if (dist < catSize * 0.4 + p.size) {
+      // Shield weapon reduces damage
+      const dmg = weaponIndex === 5 ? (8 + currentLevel * 2) * 0.5 : (8 + currentLevel * 2);
+      damageCat(dmg);
+      projectiles.splice(i, 1);
+    }
+  }
+
+  // Draw planet surface at bottom
+  const pc = PLANETS[currentLevel].color;
+  const grad = ctx.createLinearGradient(0, H * 0.85, 0, H);
+  grad.addColorStop(0, 'transparent');
+  grad.addColorStop(0.5, pc + '44');
+  grad.addColorStop(1, pc + '88');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, H * 0.85, W, H * 0.15);
+
+  // Draw projectiles
+  catProjectiles.forEach(p => drawProjectile(p));
+  projectiles.forEach(p => drawProjectile(p));
+
+  // Draw monster
+  drawMonster(bossX, bossY, bossSize, MONSTER_COLORS[currentLevel], currentLevel, bossHitFlash > 0);
+
+  // Draw cat
+  if (!(catInvincible > 0 && Math.floor(catInvincible / 3) % 2 === 0)) {
+    drawCat(catX, catY, catSize, catInvincible > 0);
+  }
+}
+
+// ============== BOSS DEATH ANIMATION ==============
+function updateBossDying(dt) {
+  const catSize = Math.min(W, H) * 0.08;
+  bossDyingTimer++;
+  const progress = bossDyingTimer / bossDyingDuration; // 0 to 1
+
+  // Draw planet surface
+  const pc = PLANETS[bossDyingLevel].color;
+  const grad = ctx.createLinearGradient(0, H * 0.85, 0, H);
+  grad.addColorStop(0, 'transparent');
+  grad.addColorStop(0.5, pc + '44');
+  grad.addColorStop(1, pc + '88');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, H * 0.85, W, H * 0.15);
+
+  // Boss shakes more and more, shrinks, flashes
+  const shakeIntensity = progress * 15;
+  const drawX = bossDyingX + (Math.random() - 0.5) * shakeIntensity;
+  const drawY = bossDyingY + (Math.random() - 0.5) * shakeIntensity;
+  const scale = Math.max(0, 1 - progress * 0.8);
+  const currentSize = bossDyingSize * scale;
+  const flash = Math.floor(bossDyingTimer / 3) % 2 === 0;
+
+  // Periodic small explosions during death
+  if (bossDyingTimer % 8 === 0 && progress < 0.85) {
+    const ex = bossDyingX + (Math.random() - 0.5) * bossDyingSize * 0.8;
+    const ey = bossDyingY + (Math.random() - 0.5) * bossDyingSize * 0.8;
+    spawnParticles(ex, ey, 6, MONSTER_COLORS[bossDyingLevel], 4);
+    spawnParticles(ex, ey, 4, '#ff4400', 3);
+    if (bossDyingTimer % 16 === 0) playSound('hit');
+  }
+
+  // Draw the dying boss (shrinking, flashing, shaking)
+  if (progress < 0.85) {
+    ctx.globalAlpha = 1 - progress * 0.5;
+    drawMonster(drawX, drawY, currentSize, MONSTER_COLORS[bossDyingLevel], bossDyingLevel, flash);
+    ctx.globalAlpha = 1;
+  }
+
+  // Final big explosion
+  if (bossDyingTimer === Math.floor(bossDyingDuration * 0.85)) {
+    spawnParticles(bossDyingX, bossDyingY, 30, MONSTER_COLORS[bossDyingLevel], 8);
+    spawnParticles(bossDyingX, bossDyingY, 20, '#ff8800', 6);
+    spawnParticles(bossDyingX, bossDyingY, 15, '#ffff00', 10);
+    shakeTimer = 15;
+    playSound('explosion');
+  }
+
+  // Draw cat watching the show
+  drawCat(catX, catY, catSize, false);
+
+  // End of death animation -> show win overlay
+  if (bossDyingTimer >= bossDyingDuration) {
+    winLevel();
+  }
+}
+
+// ============== MAIN DRAW ==============
+function drawBackground() {
+  // Space background
+  let bgColor = '#0a0a2e';
+  if (gameState === 'boss') {
+    bgColor = PLANETS[currentLevel].bgColor;
+  }
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, W, H);
+
+  // Stars
+  const time = Date.now() * 0.001;
+  stars.forEach(s => {
+    s.x -= s.speed;
+    if (s.x < 0) { s.x = W; s.y = Math.random() * H; }
+    const alpha = 0.4 + Math.sin(time * s.twinkleSpeed + s.twinkle) * 0.4;
+    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function updateParticles() {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.confetti) p.vy += 0.1;
+    p.life -= p.decay;
+    if (p.life <= 0) { particles.splice(i, 1); continue; }
+
+    ctx.globalAlpha = p.life;
+    if (p.confetti) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      p.rotation += p.rotSpeed;
+      ctx.rotate(p.rotation);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+}
+
+function gameLoop() {
+  requestAnimationFrame(gameLoop);
+  resize();
+
+  // Screen shake
+  if (shakeTimer > 0) {
+    shakeTimer--;
+    ctx.save();
+    ctx.translate(
+      (Math.random() - 0.5) * shakeTimer * 2,
+      (Math.random() - 0.5) * shakeTimer * 2
+    );
+  }
+
+  drawBackground();
+
+  if (gameState === 'space') {
+    updateSpace(1);
+  } else if (gameState === 'boss') {
+    updateBoss(1);
+  } else if (gameState === 'bossDying') {
+    updateBossDying(1);
+  }
+
+  updateParticles();
+
+  if (shakeTimer > 0) ctx.restore();
+}
+
+// ============== INPUT ==============
+document.addEventListener('keydown', e => {
+  keys[e.key] = true;
+  if (e.key === ' ' && gameState === 'boss') {
+    e.preventDefault();
+    catAttack();
+  }
+});
+document.addEventListener('keyup', e => { keys[e.key] = false; });
+
+// Mobile controls
+const btnUp = document.getElementById('btnUp');
+const btnDown = document.getElementById('btnDown');
+const btnAttack = document.getElementById('btnAttack');
+
+function addTouchEvents(el, onDown, onUp) {
+  el.addEventListener('touchstart', e => { e.preventDefault(); onDown(); });
+  el.addEventListener('touchend', e => { e.preventDefault(); onUp(); });
+  el.addEventListener('touchcancel', e => { e.preventDefault(); onUp(); });
+  el.addEventListener('mousedown', e => { e.preventDefault(); onDown(); });
+  el.addEventListener('mouseup', e => { e.preventDefault(); onUp(); });
+}
+
+addTouchEvents(btnUp, () => { mobileUp = true; }, () => { mobileUp = false; });
+addTouchEvents(btnDown, () => { mobileDown = true; }, () => { mobileDown = false; });
+
+btnAttack.addEventListener('touchstart', e => { e.preventDefault(); ensureAudio(); catAttack(); });
+btnAttack.addEventListener('mousedown', e => { e.preventDefault(); ensureAudio(); catAttack(); });
+
+// Touch on canvas for boss phase (tap to attack)
+canvas.addEventListener('touchstart', e => {
+  ensureAudio();
+  if (gameState === 'boss') {
+    catAttack();
+  }
+});
+
+// Touch drag for movement
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const t = e.touches[0];
+  if (t) {
+    const rect = canvas.getBoundingClientRect();
+    const ty = t.clientY - rect.top;
+    if (ty < catY - 10) { mobileUp = true; mobileDown = false; }
+    else if (ty > catY + 10) { mobileDown = true; mobileUp = false; }
+    else { mobileUp = false; mobileDown = false; }
+  }
+});
+canvas.addEventListener('touchend', () => { mobileUp = false; mobileDown = false; });
+
+// ============== START ==============
+const btnNewGame = document.getElementById('btnNewGame');
+const btnContinue = document.getElementById('btnContinue');
+
+// Check for save
+const saved = loadProgress();
+if (saved) {
+  btnContinue.classList.remove('hidden');
+}
+
+btnNewGame.addEventListener('click', () => {
+  ensureAudio();
+  localStorage.removeItem('michicosmico');
+  currentLevel = 0;
+  weaponIndex = 0;
+  lives = 3;
+  score = 0;
+  document.getElementById('titleScreen').classList.add('hidden');
+  startSpacePhase();
+});
+
+btnContinue.addEventListener('click', () => {
+  ensureAudio();
+  const s = loadProgress();
+  if (s) {
+    currentLevel = s.level;
+    weaponIndex = s.weaponIndex || Math.min(currentLevel, WEAPONS.length - 1);
+    lives = s.lives || 3;
+    score = s.score || 0;
+  }
+  document.getElementById('titleScreen').classList.add('hidden');
+  startSpacePhase();
+});
+
+// Start the loop
+gameLoop();
+</script>
+</body>
+</html>
